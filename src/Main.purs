@@ -1,7 +1,9 @@
 module Main where
 
 import Color (Color)
+import Data.List
 import Data.Maybe
+import Data.Pair
 import Prelude
 import Effect (Effect)
 import Effect.Exception.Unsafe (unsafeThrow)
@@ -36,17 +38,19 @@ type ColorDefinition = { hueRange    :: Maybe (Pair Int Int)
 -- port this function over
 getHue :: Int -> Hue
 getHue n =
-  | n' == 0   = HueMonochrome
-  | n' >= 283 = HuePink
-  | n' >= 258 = HuePurple
-  | n' >= 179 = HueBlue
-  | n' >= 63  = HueGreen
-  | n' >= 47  = HueYellow
-  | n' >= 19  = HueOrange
-  | n' >= -26 = HueRed
-  | otherwise = error "getHue: hue outside [0, 360]"
-  where
-    n' = if n >= 334 && n <= 360 then n - 360 else n
+  let n' = if n >= 334 && n <= 360 then n - 360 else n
+   in
+   case n' of
+        0   -> HueMonochrome
+        283 -> HuePink
+        258 -> HuePurple
+        179 -> HueBlue
+        63  -> HueGreen
+        47  -> HueYellow
+        19  -> HueOrange
+        -26 -> HueRed
+        _   -> unsafeThrow "getHue: hue outside [0, 360]"
+
 
 main :: Effect Unit
 main = do
