@@ -16,6 +16,7 @@ main = do
   log "You should add some tests."
   randomHueTest
   randomColorTest
+  saturationRangeTest
 
 
 -- @TODO: write test for randomColor
@@ -32,3 +33,9 @@ randomColorTest = do
   let (T.Tuple color seed') = flip runState (mkSeed 1) $ RandomColor.randomColor HueBlue LumLight
   log $ show color
   pure unit
+
+saturationRangeTest :: Effect Unit
+saturationRangeTest = do
+  let x = RandomColor.saturationRange HueBlue
+  log $ show x
+

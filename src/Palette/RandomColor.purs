@@ -33,22 +33,6 @@ getHue n =
           | n' >= 19  -> HueOrange
           | n' >= -26 -> HueRed
           | otherwise -> unsafeThrow "getHue: hue outside [0, 360]"
-    {-- where --}
-    {--   n' = if n >= 334 && n <= 360 then n - 360 else n --}
-
-  {-- | n' --}
-  {-- let n' = if n >= 334 && n <= 360 then n - 360 else n --}
-  {--  in --}
-  {--  case n' of --}
-  {--       0   -> HueMonochrome --}
-  {--       283 -> HuePink --}
-  {--       258 -> HuePurple --}
-  {--       179 -> HueBlue --}
-  {--       63  -> HueGreen --}
-  {--       47  -> HueYellow --}
-  {--       19  -> HueOrange --}
-  {--       -26 -> HueRed --}
-  {--       _   -> unsafeThrow "getHue: hue outside [0, 360]" --}
 
 getColorDefinition :: Hue -> ColorDefinition
 getColorDefinition HueMonochrome = { hueRange: Nothing
@@ -155,11 +139,7 @@ randomColor hue lum = do
   let hue'  = getHue hueValue
   satValue <- randomSaturation hue' lum
   briValue <- randomBrightness hue' lum satValue
-  pure $ hsv (toNumber hueValue) (toNumber $ satValue / 100) (toNumber $ briValue / 100)
-  {-- let (RGB r g b) = hsv (hueValue) --}
-  {--                       (satValue / 100) --}
-  {--                       (briValue / 100) --}
-  {-- return $ sRGB r g b --}
+  pure $ hsv (toNumber hueValue) ((toNumber satValue) / 100.0) ((toNumber briValue) / 100.0)
 
 -- TODO
 -- - generate random colors
