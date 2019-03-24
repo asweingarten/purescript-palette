@@ -8,6 +8,7 @@ import Data.List (List(..), fromFoldable, zip, (:), head, last)
 import Data.Maybe (Maybe(..), fromMaybe, fromJust)
 import Data.Pair (Pair(..), fst)
 import Data.Tuple as T
+import Debug.Trace (trace)
 import Partial.Unsafe (unsafePartial)
 import Prelude
 import Effect (Effect)
@@ -17,20 +18,37 @@ import Random.PseudoRandom (class Random, randomR, Seed)
 
 import Palette.Types
 
+-- @TODO: This function is WRONG. The numbers should be ranges (duh). I'm not sure what the best way to write it is.
+-- Probs a good idea to not spend 5 minutes figuring out a cleaner solution than a bunch of ifs
 getHue :: Int -> Hue
 getHue n =
-  let n' = if n >= 334 && n <= 360 then n - 360 else n
-   in
-   case n' of
-        0   -> HueMonochrome
-        283 -> HuePink
-        258 -> HuePurple
-        179 -> HueBlue
-        63  -> HueGreen
-        47  -> HueYellow
-        19  -> HueOrange
-        -26 -> HueRed
-        _   -> unsafeThrow "getHue: hue outside [0, 360]"
+  case (if n >= 334 && n <= 360 then n - 360 else n) of
+       0 -> HueMonochrome
+       n' | n' == 0   -> HueMonochrome
+          | n' >= 283 -> HuePink
+          | n' >= 258 -> HuePurple
+          | n' >= 179 -> HueBlue
+          | n' >= 63  -> HueGreen
+          | n' >= 47  -> HueYellow
+          | n' >= 19  -> HueOrange
+          | n' >= -26 -> HueRed
+          | otherwise -> unsafeThrow "getHue: hue outside [0, 360]"
+    {-- where --}
+    {--   n' = if n >= 334 && n <= 360 then n - 360 else n --}
+
+  {-- | n' --}
+  {-- let n' = if n >= 334 && n <= 360 then n - 360 else n --}
+  {--  in --}
+  {--  case n' of --}
+  {--       0   -> HueMonochrome --}
+  {--       283 -> HuePink --}
+  {--       258 -> HuePurple --}
+  {--       179 -> HueBlue --}
+  {--       63  -> HueGreen --}
+  {--       47  -> HueYellow --}
+  {--       19  -> HueOrange --}
+  {--       -26 -> HueRed --}
+  {--       _   -> unsafeThrow "getHue: hue outside [0, 360]" --}
 
 getColorDefinition :: Hue -> ColorDefinition
 getColorDefinition HueMonochrome = { hueRange: Nothing
@@ -133,6 +151,7 @@ randomBrightness hue lum saturationValue = do
 randomColor :: Hue -> Luminosity -> State Seed Color
 randomColor hue lum = do
   hueValue <- randomHue hue
+  let _ = trace (show hueValue) \_ -> hueValue
   let hue'  = getHue hueValue
   satValue <- randomSaturation hue' lum
   briValue <- randomBrightness hue' lum satValue

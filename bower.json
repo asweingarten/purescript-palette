@@ -16,7 +16,8 @@
     "purescript-pseudo-random": "^0.2.1",
     "purescript-enums": "^4.0.1",
     "purescript-transformers": "^4.2.0",
-    "purescript-partial": "^2.0.1"
+    "purescript-partial": "^2.0.1",
+    "purescript-debug": "^4.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^4.0.0"
