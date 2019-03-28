@@ -30,12 +30,13 @@ randomHueTest = do
 randomColorTest :: Effect Unit
 randomColorTest = do
   log "randomColorTest"
-  let (T.Tuple color seed') = flip runState (mkSeed 1) $ RandomColor.randomColor HueBlue LumLight
+  let (T.Tuple color seed') = flip runState (mkSeed 1838) $ RandomColor.randomColor HueBlue LumLight
   log $ show color
   pure unit
 
 saturationRangeTest :: Effect Unit
 saturationRangeTest = do
+  log "saturationRangeTest"
   let x = RandomColor.saturationRange HueBlue
   log $ show x
 
