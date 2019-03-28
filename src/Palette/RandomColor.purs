@@ -135,7 +135,6 @@ randomBrightness hue lum saturationValue = do
 randomColor :: Hue -> Luminosity -> State Seed Color
 randomColor hue lum = do
   hueValue <- randomHue hue
-  let _ = trace (show hueValue) \_ -> hueValue
   let hue'  = getHue hueValue
   satValue <- randomSaturation hue' lum
   briValue <- randomBrightness hue' lum satValue
